@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Decrypt and Extract</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <style>
+        .display-image {
+            max-width: 100%;
+            width: 500px;
+            height: auto;
+            border: 1px solid #ccc;
+            margin-top: 10px;
+            border-radius: 10px;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .alert {
+            background-color: #d4edda;
+            color: #155724;
+            padding: 10px 15px;
+            margin: 15px 0;
+            border: 1px solid #c3e6cb;
+            border-radius: 5px;
+            position: relative;
+        }
+
+        .alert .close {
+            position: absolute;
+            top: 5px;
+            right: 10px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>Decrypt & Extract Message</h2>
+        <form method="POST" enctype="multipart/form-data" id="decryptForm">
+            <label>Password:</label>
+            <input type="text" name="password" required>
+
+            <label>Authentication Image:</label>
+            <input type="file" name="auth_img" accept="image/*" required>
+
+            <label>Stego Image:</label>
+            <input type="file" name="stego_img" accept="image/*" required>
+
+            <div class="button-group">
+                <button type="submit">Decrypt & Extract</button>
+                <button type="button" class="clear" onclick="clearForm()">Clear</button>
+                <a href="/" class="button">← Back</a>
+            </div>
+        </form>
+
+        {% if secret_msg %}
+        <div class="output">
+            <div class="alert">
+                <span>Decryption done successfully</span>
+                <span class="close" onclick="this.parentElement.style.display='none';">x</span>
+            </div>
+            <h3>Secret Message:</h3>
+            <p>{{ secret_msg }}</p>
+        </div>
+        {% endif %}
+
+        {% if decrypted_image %}
+        <div class="output">
+            <h3>Decrypted Image:</h3>
+            <img src="{{ url_for('serve_output', filename=decrypted_image) }}" class="display-image">
+        </div>
+        {% endif %}
+
+
+        {% if histogram_image %}
+        <div class="output">
+            <h3>Histogram:</h3>
+            <img src="{{ histogram_image }}" class="display-image">
+        </div>
+        {% endif %}
+    </div>
+
+    <script>
+        function clearForm() {
+            document.getElementById("decryptForm").reset();
+            document.querySelectorAll(".output").forEach(el => el.remove());
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Encrypt and Embed</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+    <div class="container">
+        <h2>Encrypt Image & Embed Secret Message</h2>
+        <form method="POST" enctype="multipart/form-data" id="encryptForm">
+            <label>Password:</label>
+            <input type="text" name="password" required>
+
+            <label>Authentication Image:</label>
+            <input type="file" name="auth_img" accept="image/*" required>
+
+            <label>Secret Image to Encrypt:</label>
+            <input type="file" name="secret_img" accept="image/*" required>
+
+            <label>Secret Message to Embed:</label>
+            <textarea name="secret_msg" required></textarea>
+
+            <label>Email:</label>
+            <input type="email" name="email" required>
+
+
+            <button type="submit">Encrypt & Embed</button>
+            <button type="button" class="clear" onclick="clearForm()">Clear</button>
+        </form>
+
+        {% if stego_image %}
+        <div class="output">
+            <div class="alert">
+                <span>Encrypt & Embed completed successfully</span>
+                <span class="close" onclick="this.parentElement.style.display='none';">x</span>
+            </div>
+            <h3>Stego Image Created:</h3>
+            <img src="{{ url_for('serve_output', filename=stego_image) }}" class="display-image">
+            
+            <br><br>
+            <a href="{{ download_url }}" download class="btn btn-primary">Download Stego Image</a>
+        </div>
+        {% endif %}
+
+    </div>
+
+    <!-- At the bottom inside <body> -->
+    <a href="/" class="button">← Back</a>
+
+
+    <script>
+        function clearForm() {
+            document.getElementById("encryptForm").reset();
+            document.querySelector(".output")?.remove();
+        }
+    </script>
+</body>
+
+</html>
